@@ -1,0 +1,54 @@
+<%- include('templates/header', {tittle: "Jugando"}) %>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12 p-5">
+            <h2>Trivia</h2>
+            <!-- Generar una card para cada pregunta -->
+            <div class="card-deck">
+                <div class="card p-5">
+                    <form method="POST">
+                    <% for (var i = 0; i < randomTriviaQuestion.length; i++) { %>
+                        <% let name = "question"+i %>
+                        <fieldset class="mb-3">
+                            <legend>* <%=randomTriviaQuestion[i].question %></legend>
+                            <% if (randomTriviaQuestion[i].answer1.length >0) { %>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="radio" name="<%= name %>" id="<%= name %>" value="option1" checked>
+                                        <%= randomTriviaQuestion[i].answer1 %>
+                                </div>
+                            <% } %>
+                            <% if (randomTriviaQuestion[i].answer2.length >0) { %>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="radio" name="<%= name %>" id="<%= name %>" value="option2">
+                                        <%= randomTriviaQuestion[i].answer2 %>
+                                </div>
+                            <% } %>
+                            <% if (randomTriviaQuestion[i].answer3.length >0) { %>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="radio" name="<%= name %>" id="<%= name %>" value="option3">
+                                        <%= randomTriviaQuestion[i].answer3 %>
+                                </div>
+                            <% } %>
+                            <% if (randomTriviaQuestion[i].answer4.length >0) { %>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="radio" name="<%= name %>" id="<%= name %>" value="option4">
+                                        <%= randomTriviaQuestion[i].answer4 %>
+                                </div>
+                            <% } %>
+                            <% if(randomTriviaQuestion[i].answer5.length >0) { %>
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="radio" name="<%= name %>" id="<%= name %>" value="option5">
+                                        <%= randomTriviaQuestion[i].answer5 %>
+                                </div>
+                            <% } %>
+                        </fieldset>  
+                    <% } %>
+                    <button type="submit" class="btn btn-primary mt-3">Enviar Respuesta</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('templates/footer') %>

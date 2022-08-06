@@ -1,0 +1,28 @@
+<%- include('templates/header', {tittle: "Preguntas"}) %>
+
+    <div class="container-fluid d-flex justify-content-center flex-wrap">
+            <!-- crear una tarjeta por cada pregunta del arreglo a recibir -->
+            <% for (let i = 0; i < triviaQuestionArray.length; i++) { %>
+                <div class="card cardQuestions ">
+                    <div class="card-header">
+                        <h5 class="card-title"><%= triviaQuestionArray[i].question %></h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="fw-bold"> Respuesta Correcta: </p>
+                        <p class="text-success fw-bold"><%= triviaQuestionArray[i].answer5 %></p>
+                        <p class="fw-bold">Respuestas incorrectas: </p>
+                        <p><%= triviaQuestionArray[i].answer1 %></p>
+                        <p><%= triviaQuestionArray[i].answer2 %></p>
+                        <p><%= triviaQuestionArray[i].answer3 %></p>
+                        <p><%= triviaQuestionArray[i].answer4 %></p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-around flex-wrap">
+                        <a class="btn btn-primary" href="/web/game/formupdtriviaquestion/<%= triviaQuestionArray[i].id %>" rol="button">Modificar</a>
+                        <a class="btn btn-danger" href="/web/game/deletetriviaquestion/<%= triviaQuestionArray[i].id %>" rol="button">Eliminar</a>
+                    </div>
+                </div>
+            <% } %>
+            </table>   
+    </div>
+
+<%- include('templates/footer') %>

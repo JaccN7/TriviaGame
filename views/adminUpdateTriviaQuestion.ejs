@@ -1,0 +1,37 @@
+<%- include('templates/header', {tittle: 'Modificar Pregunta'}) %>
+
+<div class="container-fluid px-5 my-5">
+    <h3 class="text-center">Modificar Pregunta</h3>
+    <form action="/web/game/updatetriviaquestion" method="POST" class="border border-light p-4">
+        <input type="hidden" id="question" name="question" value="<%= objModifiedQuestion.id %>" required>      
+        <div class="form-group">
+            <label for="question">Pregunta:</label>
+            <input type="text" class="form-control" id="question" name="question" value="<%= objModifiedQuestion.question %>" required>
+        </div>
+        <div class="form-group">
+            <label for="answer1">Respuesta 1</label>
+            <input type="text" class="form-control" id="answer1" name="answer1" value="<%= objModifiedQuestion.answer1 %>" >
+        </div>
+        <div class="form-group">
+            <label for="answer2">Respuesta 2</label>
+            <input type="text" class="form-control" id="answer2" name="answer2" value="<%= objModifiedQuestion.answer2 %>" >
+        </div>
+        <div class="form-group">
+            <label for="answer3">Respuesta 3</label>
+            <input type="text" class="form-control" id="answer3" name="answer3" value="<%= objModifiedQuestion.answer3 %>">
+        </div>
+        <div class="form-group">
+            <label for="answer4">Respuesta 4</label>
+            <input type="text" class="form-control" id="answer4" name="answer4" value="<%= objModifiedQuestion.answer4 %>">
+        </div>
+        <div class="form-group">
+            <label for="answer5">Respuesta correcta</label>
+            <input type="text" class="form-control" id="answer5" name="answer5" value="<%= objModifiedQuestion.answer5 %>" required>
+        </div>
+        <div class="container-fluid d-flex justify-content-center">
+            <button class="btn btn-dark btn-block mt-3" type="submit">Modificar pregunta</button>
+        </div>
+    </form>
+</div>
+
+<%- include('templates/footer') %>

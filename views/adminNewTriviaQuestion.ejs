@@ -1,0 +1,35 @@
+<%-include('templates/header', {tittle:'Crear Pregunta'})%>
+
+
+    <div class="container-fluid px-5 my-5">
+        <h3 class="text-center">Nueva Pregunta</h3>
+        <form action="newtriviaquestion" method="POST" class="border border-light p-4">
+
+            <label for="textInput">Pregunta</label>
+            <input type="text" id="question" name="question" class="form-control mb-4" placeholder="Pregunta" required>
+
+            <label for="textInput">Respuesta Correcta</label>
+            <input type="text" id="answer5" name="answer5" class="form-control mb-4"
+                placeholder="Respuesta correcta" required>
+
+            <label for="textInput">Respuesta 1</label>
+            <input type="text" id="answer1" name="answer1" class="form-control mb-4"
+                placeholder="Respuesta 1" required>
+
+            <label for="textInput">Respuesta 2</label>
+            <input type="text" id="answer2" name="answer2" class="form-control mb-4"
+                placeholder="Respuesta 2">
+
+            <label for="textInput">Respuesta 3</label>
+            <input type="text" id="answer3" name="answer3" class="form-control mb-4"
+                placeholder="Respuesta 3">
+
+            <label for="textInput">Respuesta 4</label>
+            <input type="text" id="answer4" name="answer4" class="form-control mb-4"
+                placeholder="Respuesta 4">
+
+            <button class="btn btn-dark btn-block mt-2 text-center" type="submit">Guardar pregunta</button>
+        </form>
+    </div>
+
+    <%-include('templates/footer')%>
