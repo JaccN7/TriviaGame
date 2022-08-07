@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
@@ -16,6 +17,7 @@ const errorRoutes = require('./routes/web/errorRoutes');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({secret: process.env.SECRET_KEY, resave: true, saveUninitialized: true}));
 app.use(cors());
 
 // Contenido estatico de la aplicación
@@ -28,10 +30,12 @@ app.set('views', __dirname + '/views');
 //Rutas API
 app.use('/', playerScoreRoutes.routes);
 app.use('/api/game', triviaQuestionRoutes.routes);
-app.use('/api/adminprofile', userRoutes.routes);
+app.use('/api/userprofile', userRoutes.routes);
 
 //Rutas Web
+app.use('/web/game', playerScoreWebRoutes.routes);
 app.use('/web/game', triviaQuestionWebRoutes.routes);
+app.use('/web/userprofile', userWebRoutes.routes);
 app.use('/', errorRoutes.routes);
 
 app.listen(PORT, () => {
