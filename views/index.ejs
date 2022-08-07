@@ -20,11 +20,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% if (playerScoreArray.length > 0) { %>
-                        <% let i = 1; %>
+                    <% let i = 1; %>
+                    <% if (playerScoreArray.length > 0) { %>            
                         <% playerScoreArray.forEach(score => { %>
                             <tr>
-                                <td><%= i++; %></td>
+                                <td class="text-center"><%= i++; %>
+                                    <% if (i<=4) { %>
+                                        <img src="/../public/images/trophy.png" alt="Trophy" class="img-fluid imgIcon" />
+                                    <% } else { %>
+                                        <img src="/../public/images/medal.png" alt="Medal" class="img-fluid imgIcon" />
+                                    <% } %> 
+                                    </td>
                                 <td><%= score.name %></td>
                                 <td><%= score.score %> / 3</td>
                                 <td><%= score.porcentage %> %</td>
