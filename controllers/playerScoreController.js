@@ -29,16 +29,14 @@ const getPlayerScore = async (req, res, next) => {
             playerScoreArray.sort(function (a, b) {
                 return b.score - a.score;
             });
-            //Comprobar el origen de la petición
-            req.originalUrl.includes("web") ?
-                res.render('/', { message: "Puntajes registrados", playerScoreArray }) :
-                res.status(200).json({ message: "Puntajes registrados", playerScoreArray });
+            //Comprobar el origen de la petición operador ternario solo if sin else
+            if(req.originalUrl.includes("api")) {
+                return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
+            }
+            res.render('index', { message: "Puntajes registrados", playerScoreArray });
         }
     } catch (error) {
-        //Comprobar el origen de la petición
-        req.originalUrl.includes("web") ?
-            res.render('error', { message: "Error al obtener los puntajes", error: error.message }) :
-            res.status(500).json({ message: "Se ha presentado un error", error: error.message });
+        res.render('error', { message: "Error al obtener los puntajes", error: error.message });
     }
 }
 
@@ -75,9 +73,10 @@ const addPlayerScore = async (req, res, next) => {
         const playerScoreData = await fireStore.collection('playerScore').add(newPlayerScore);
 
         //Comprobar el origen de la petición
-        req.originalUrl.includes("web") ?
-            res.redirect('/') :
-            res.status(201).json({ message: "Puntaje registrado", playerScoreData });
+        if(req.originalUrl.includes("api")) {
+            return res.status(201).json({ message: "Puntaje registrado", playerScoreData });
+        }
+            res.redirect('/');
 
     } catch (error) {
         //Comprobar el origen de la petición
