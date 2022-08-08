@@ -1,0 +1,31 @@
+<%- include('templates/header', { tittle: "Gestionar Usuarios"}) %>
+
+<div class="container">
+    <div class="wrapper w-70" >
+        <div class="logo">
+            <img src="/../public/images/trivia.png" alt="TriviaGame">
+        </div>
+        <div class="text-center mt-4 name">
+            <h1>Registrar Usuario</h1>
+        </div>
+        <form action="registration" method="POST" class="p-3 mt-3">
+            <h6>Nombre de usuario</h6>
+            <div class="form-field d-flex align-items-center">
+                <span class="far fa-user"></span>
+                <input type="text" name="userName" id="userName" placeholder="Nombre de Usuario">
+            </div>
+            <h6>Contraseña</h6>
+            <div class="form-field d-flex align-items-center">
+                <span class="fas fa-key"></span>
+                <input type="password" name="userPassword" id="userPassword" placeholder="Contraseña">
+            </div>
+            <button class="btn mt-3" id="btnLogin" type="submit" >Iniciar Sesión</button>
+        </form>
+        <div class="text-center fs-6">
+            <small><a href="#">¿Olvido la contraseña?</a> o ¿Ya tiene una cuenta? <a href="/web/login">Inicie Sesión</a></small>
+        </div>
+        <div class="text-center fs-6 mt-3" id="info"></div>
+    </div>
+</div>
+
+<%- include('templates/footer') %>
