@@ -1,9 +1,19 @@
 const express = require('express');
 const router = express.Router();
 
-//Ruta para gestionar usuarios
-//Ruta para ingresar nuevos usuarios (con opcion de modificar el tipo de usuario (admin/user))
-//Ruta para bloquear usuarios (cambiar el estado de activo a inactivo)
+const {pageSignUp, pageLogin, signUp, login, deleteUsers, registeredUsers} = require('../../controllers/userController');
+
+//Crear usuario
+router.post('/signup', signUp);
+
+//Ingresar usuario
+router.post('/login', login);
+
+//Ver usuarios
+router.get('/', registeredUsers);
+
+//Borrar usuario
+router.delete('/', deleteUsers);
 
 module.exports = {
     routes: router

@@ -3,10 +3,8 @@ const router = express.Router();
 
 const { getPlayerScore } = require("../../controllers/playerScoreController");
 
-//Ruta para cargar tabla con puntajes
+//Ruta para ver puntajes de los jugadores
 router.get('/', getPlayerScore);
-
-//Ruta para ingresar nuevos puntajes
 
 module.exports = {
     routes: router
