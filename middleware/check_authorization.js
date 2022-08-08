@@ -10,6 +10,6 @@ module.exports= (req, res, next) => {
             next();
         }
     } catch (error) {
-        return res.render('error', { message: "Error al verificar la sessión", error: error.message });
+        return res.render('error', { message: "Error al verificar la sessión", error: error.message});
     }
 }
