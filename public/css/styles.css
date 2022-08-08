@@ -7,7 +7,6 @@
     width: 30% !important;
 }
 
-/*card questions se deben alinear a la izquierda, una al lado de la otra*/
 .cardQuestions {
     width: 24rem !important;
     height: 10rem;
@@ -105,5 +104,42 @@
         padding: 40px 15px 15px 15px;
     }
 }
-
 /* Formulario Login - Fin*/
+
+/* Inputs radio de la Trivia - Inicio */
+input {
+    padding: 2rem;
+    background: #fcfcfc;
+}
+
+input[type=radio] {
+    display: none;
+}
+
+label {
+    display: inline-block;
+    margin: 0.2rem;
+    padding: 0.5rem;
+    background: #fcfcfc;
+    width: 90%;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+label:hover {
+    background: #5b43e6;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* comprobar checked*/
+input:checked + label {
+    background: #7059f1;
+    color: #fff;
+    font-weight: bold;
+}
+input[type=radio]:checked + label {
+    background: #27159b;
+    color: #ffffff;
+}
+/* Formulario Login - Fin */
