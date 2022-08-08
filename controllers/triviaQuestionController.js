@@ -5,17 +5,19 @@ const fireStore = firebase.firestore();
 
 //Generar un juego con preguntas aleatorias
 const getGenerateGame = async (req, res, next) => {
-    console.log("### Método getGenerateGame ###");
     try {
         const triviaQuestion = fireStore.collection('triviaQuestion');
         const triviaQuestionData = await triviaQuestion.get();
         const randomTriviaQuestion = [];
+        //Seleccionar 3 preguntas aleatorias, 
         while (randomTriviaQuestion.length < 3) {
+            //Seleccionar ID aleatorio
             const randomId = triviaQuestionData.docs[Math.floor(Math.random() * triviaQuestionData.size)].id;
-            //Verificación: No para no repetir la pregunta
+            //Verificar que no se repitan las preguntas
             if (randomTriviaQuestion.find(obj => obj.id === randomId) === undefined) {
-                //obtiene los datos de la pregunta y respuestas asociadas a ese id y crea un objeto
+                //Obtener los datos de la pregunta y respuestas asociadas a ese id
                 const randomTriviaQuestionData = await triviaQuestion.doc(randomId).get();
+                //Crear un objeto de la clase TriviaQuestion con los datos de la pregunta y respuestas
                 const randomTriviaQuestionObject = new TriviaQuestion(
                     randomTriviaQuestionData.id,
                     randomTriviaQuestionData.data().question,
@@ -25,23 +27,30 @@ const getGenerateGame = async (req, res, next) => {
                     randomTriviaQuestionData.data().answer4 ? randomTriviaQuestionData.data().answer4 : "",
                     randomTriviaQuestionData.data().answer5 ? randomTriviaQuestionData.data().answer5 : ""
                 );
+                //Agregar el objeto a un array de objetos
                 randomTriviaQuestion.push(randomTriviaQuestionObject);
             }
         }
-        res.render('triviaGame', { randomTriviaQuestion });
+
+        //Comprobar el origen de la petición
+        req.originalUrl.includes("web") ?
+            res.render('triviaGame', { randomTriviaQuestion: randomTriviaQuestion }) :
+            res.status(200).json({ message: "Juego generado", randomTriviaQuestion: randomTriviaQuestion });
     } catch (error) {
-        controlError(error, res, req);
-        //res.status(500).json({message: "Error al generar el juego", error: error.message});
+        //Comprobar el orgigen de la petición
+        req.originalUrl.includes("web") ?
+            res.render('error', { message: "Error al generar juego", error: error.message }) :
+            res.status(500).json({ message: "Error al generar juego", error: error.message });
     }
 }
 
-//Mostrar todas las preguntas
+//Cargar todas las preguntas
 const getTriviaQuestion = async (req, res, next) => {
-    console.log("### Método getTriviaQuestion ###");
     try {
         const triviaQuestion = await fireStore.collection('triviaQuestion').get();
+        //comprobar si hay preguntas registradas
         if (triviaQuestion.empty) {
-            res.status(404).json({ message: "No hay preguntas" });
+            return res.status(404).json({ message: "No hay preguntas" });
         };
         const triviaQuestionArray = [];
         let count = 0;
@@ -59,20 +68,13 @@ const getTriviaQuestion = async (req, res, next) => {
             count++;
         });
         //si la ruta desde la que accede es web/ entoces renderizar view y la ruta desde la que accede es api/ entonces devolver un json
-        if (req.originalUrl.includes("web")) {
-            res.render('adminWatchTriviaQuestions', { message: "Registro preguntas", triviaQuestionArray: triviaQuestionArray, cantidadPreguntas: count });
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.render('adminWatchTriviaQuestions', { message: "Registro preguntas", triviaQuestionArray: triviaQuestionArray, cantidadPreguntas: count }) :
             res.status(200).json({ message: "Registro preguntas", triviaQuestionArray: triviaQuestionArray, cantidadPreguntas: count });
-        }
-
     } catch (error) {
-        if (req.originalUrl.includes("web")) {
-            res.render('error');
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.render('error') :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
-        }
     }
 }
 
@@ -89,85 +91,53 @@ const searchTriviaQuestion = async (req, res, next) => {
             res.status(404).json({ message: "Pregunta no encontrada" });
         }
     } catch (error) {
-        if (req.originalUrl.includes("web")) {
-            res.render('error');
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.render('error') :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
-        }
     }
 }
 
-
 //Crear una nueva pregunta para la trivia
 const createTriviaQuestion = async (req, res, next) => {
-    console.log("### Método createTriviaQuestion ###");
     try {
         const triviaQuestion = req.body;
         console.log(triviaQuestion);
         const newTriviaQuestion = fireStore.collection('triviaQuestion').doc().set(triviaQuestion);
 
-        if (req.originalUrl.includes("web")) {
-            res.redirect('/web/game/triviaquestions');
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.redirect('/web/triviaquestions') : 
             res.status(201).json({ message: "Pregunta creada correctamente", triviaQuestion: triviaQuestion });
-        }
     } catch (error) {
-        if (req.originalUrl.includes("web")) {
-            res.render('error');
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.render('error') : 
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
-        }
     }
 }
 
 //Actualizar una pregunta de la trivia
 const updateTriviaQuestion = async (req, res, next) => {
-    console.log("### =>>Método updateTriviaQuestion <<= ###");
     try {
         const triviaQuestion = req.body;
-        console.log("el resultado de trivia question es: " + triviaQuestion);
-        console.log("el id es: " + triviaQuestion.id);
         const updateTriviaQuestion = await fireStore.collection('triviaQuestion').doc(triviaQuestion.id).update(triviaQuestion);
-        console.log(updateTriviaQuestion);
-        if (req.originalUrl.includes("web")) {
-            res.redirect('/web/game/triviaquestions');
-        }
-        if (req.originalUrl.includes("api")) {
-            res.status(200).json({ message: "Pregunta actualizada correctamente", triviaQuestion: triviaQuestion });
-        }
+        res.redirect('/web/triviaquestions');
     } catch (error) {
-        if (req.originalUrl.includes("web")) {
-            res.render('error');
-        }
-        if (req.originalUrl.includes("api")) {
-            res.status(500).json({ message: "Se ha presentado un error", error: error.message });
-        }
+        res.render('error', { message: "Se ha presentado un error", error: error.message });
     }
 }
 
 //Eliminar una pregunta de la trivia
 const deleteTriviaQuestion = async (req, res, next) => {
-    console.log("### Método deleteTriviaQuestion ###");
     try {
         const id = req.params.id;
         console.log("id: " + id);
         const deleteTriviaQuestion = await fireStore.collection('triviaQuestion').doc(id).delete();
-        if (req.originalUrl.includes("web")) {
-            res.redirect('/web/game/triviaQuestions');
-        }
-        if (req.originalUrl.includes("api")) {
-            res.status(200).json({ message: "Pregunta eliminada correctamente" });
-        }
+        req.originalUrl.includes("web") ?
+            res.redirect('/web/triviaQuestions') :
+            res.status(200).json({ message: "Pregunta eliminada correctamente" })
     } catch (error) {
-        if (req.originalUrl.includes("web")) {
-            res.render('error');
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.render('error') :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
-        }
     }
 }
 
@@ -180,9 +150,9 @@ const pageCreateTriviaQuestion = (req, res, next) => {
 
 //Página para editar una pregunta
 const pageUpdateTriviaQuestion = async (req, res, next) => {
-    console.log("### Método pageUpdateTriviaQuestion ###");
-    //res.render('adminUpdateTriviaQuestion');
+    console.log("\n\n### Método pageUpdateTriviaQuestion ###\n");
     try {
+        //Recuperar el id de la pregunta a editar
         const id = req.params.id;
         const question = await fireStore.collection('triviaQuestion').doc(id);
         const updatequestion = await question.get();
@@ -195,31 +165,13 @@ const pageUpdateTriviaQuestion = async (req, res, next) => {
             updatequestion.data().answer4,
             updatequestion.data().answer5
         );
-        console.log(objModifiedQuestion.id);
-        if (objModifiedQuestion.id) {
-            if (req.originalUrl.includes("web")) {
-                res.render('adminUpdateTriviaQuestion', { message: "Actualizar pregunta", objModifiedQuestion: objModifiedQuestion });
-            }
-            if (req.originalUrl.includes("api")) {
-                res.status(200).json({ message: "Pregunta encontrada", question: modifiedQuestion });
-            }
-        }
+        objModifiedQuestion.id ? 
+            res.render('adminUpdateTriviaQuestion', { message: "Actualizar pregunta", objModifiedQuestion: objModifiedQuestion }) : 
+            res.render('error', { message: "Pregunta no encontrada" });
     } catch (error) {
-        if (req.originalUrl.includes("web")) {
-            res.render('error');
-        }
-        if (req.originalUrl.includes("api")) {
+        req.originalUrl.includes("web") ?
+            res.render('error') :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
-        }
-    }
-}
-
-const controlError = async (req, res, error) => {
-    if (req.originalUrl.includes("web")) {
-        res.render('error');
-    }
-    if (req.originalUrl.includes("api")) {
-        res.status(500).json({ message: "Se ha presentado un error", error: error.message });
     }
 }
 
