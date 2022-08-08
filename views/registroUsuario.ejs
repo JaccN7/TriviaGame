@@ -1,4 +1,4 @@
-<%- include('templates/header', { tittle: "Gestionar Usuarios"}) %>
+<%- include('templates/header', { tittle: "Gestionar Usuarios", userName: "Anónimo", userType: "Invitado"}) %>
 
 <div class="container">
     <div class="wrapper w-70" >
@@ -12,19 +12,18 @@
             <h6>Nombre de usuario</h6>
             <div class="form-field d-flex align-items-center">
                 <span class="far fa-user"></span>
-                <input type="text" name="userName" id="userName" placeholder="Nombre de Usuario">
+                <input type="text" name="userName" id="userName" placeholder="Nombre de Usuario" required>
             </div>
             <h6>Contraseña</h6>
             <div class="form-field d-flex align-items-center">
                 <span class="fas fa-key"></span>
-                <input type="password" name="userPassword" id="userPassword" placeholder="Contraseña">
+                <input type="password" name="userPassword" id="userPassword" placeholder="Contraseña" required>
             </div>
-            <button class="btn mt-3" id="btnLogin" type="submit" >Iniciar Sesión</button>
+            <button class="btn mt-3" id="btnLogin" type="submit" >Registrar Usuario</button>
         </form>
         <div class="text-center fs-6">
             <small><a href="#">¿Olvido la contraseña?</a> o ¿Ya tiene una cuenta? <a href="/web/login">Inicie Sesión</a></small>
         </div>
-        <div class="text-center fs-6 mt-3" id="info"></div>
     </div>
 </div>
 

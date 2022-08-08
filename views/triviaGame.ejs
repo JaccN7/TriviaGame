@@ -1,13 +1,15 @@
-<%- include('templates/header', {tittle: "Jugando"}) %>
-
+<%- include('templates/header', {tittle: "Jugando", userName: userName, userType: userType}) %>
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-12 p-5">
-            <h2>Trivia</h2>
+            <h2 class="text-center">Trivia</h2>
+            <% if(userName == "Anónimo") { %>
+                <small class="text-danger fw-bold">* No ha iniciado sesión, su puntaje será registrado como "Anónimo" *</small><br>
+                <small class="text-danger fw-bold">* Para registrar su puntaje con su nombre de usuario debe <a href="/web/login">Iniciar Sesión</a> *</small>
+            <% } %>
             <div class="card-deck">
-                <div class="card p-5">
-
-                    <form action="/web/finishedtrivia" method="POST"> 
+                <div class="card p-4">
+                        <form action="/web/finishedtrivia" method="POST"> 
 
                     <% for (var i = 0; i < randomTriviaQuestion.length; i++) { %>
                         <input type="hidden" name="id" value="<%= randomTriviaQuestion[i].id %>" required> 
@@ -25,21 +27,17 @@
                         
                         <fieldset class="mb-3">
                         <legend>* <%=randomTriviaQuestion[i].question %></legend>
-                        
                         <% for (var j = 0; j < arrayAnswers.length; j++) { %>
                             <% let name = "question" + (i + 1) +"answers" %>
+                            <% let identificador = "question" + (i+1) + "idInput"+j %>                          
                             <% if (arrayAnswers[randomArray[j]] != "") { %>
-                                <div class="form-check">
-                                    <label class="form-check-label" for="<%= name %>">
-                                        <input class="form-check-input" type="radio" name="<%= name %>" id="<%= name %>" value="<%= arrayAnswers[randomArray[j]] %>" required>
-                                        <%= arrayAnswers[randomArray[j]] %>
-                                    </label>
-                                </div>
+                                <input type="radio" name="<%= name %>" value="<%= arrayAnswers[randomArray[j]] %>" id="<%= identificador %>">
+                                <label for="<%= identificador %>"><%= arrayAnswers[randomArray[j]] %></label>
                             <% } %>
                         <% } %>
                         </fieldset>  
                     <% } %>
-                    <button type="submit" class="btn btn-primary mt-3">Enviar Respuesta</button>
+                    <button type="submit" class="btn btn-dark mt-3">Enviar Respuesta</button>
                 </form>
             </div>
         </div>

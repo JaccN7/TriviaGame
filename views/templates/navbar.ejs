@@ -7,23 +7,42 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <a class="navbar-brand" href="/../">
                 <img src="/../public/images/trivia.png" class="img-fluid imgIcon" alt="Trivia" />
-                Trivia Game - <span class=""></span></a>
+                Trivia Game -
+                <% if (userName!="Anónimo") { %>
+                    <span class="text-light">
+                    <%= userName %>
+                    </span>
+                <% } %>
+            </a>
             <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="/web/triviaquestions">Ver Preguntas</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="/web/formnewtriviaquestion">Ingresar pregunta</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-light" href="/web/registeredUsers">Administrar Usuarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class=" nav-link text-light" href="/web/signup"> Registrar Usuario</a>
-                </li>
-                <li class="nav-item">
-                    <a class=" nav-link text-light" href="/web/login"> Iniciar Sesión</a>
-                </li>
+                
+                <% if (userName!="Anónimo") { %>
+                    <% if (userType==="admin") { %>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/web/triviaquestions">Ver Preguntas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/web/formnewtriviaquestion">Ingresar pregunta</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/web/registeredUsers">Administrar Usuarios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/web/logout">Cerrar Sesión</a>
+                        </li>
+                    <% } else {%>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" href="/web/logout">Cerrar Sesión</a>
+                        </li>
+                    <% } %>
+                <% } else {%>
+                    <li class="nav-item">
+                        <a class=" nav-link text-light" href="/web/signup"> Registrar Usuario</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class=" nav-link text-light" href="/web/login"> Iniciar Sesión</a>
+                    </li>
+                <% } %>
             </ul>
         </div>
     </div>

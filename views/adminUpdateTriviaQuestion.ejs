@@ -1,5 +1,5 @@
-<%- include('templates/header', {tittle: 'Modificar Pregunta'}) %>
-
+<%- include('templates/header', {tittle: 'Modificar Pregunta', userName: userName, userType: userType}) %>
+<h5 style="display: none;"> <%= userName %></h5>
 <div class="container-fluid px-5 my-5">
     <h3 class="text-center">Modificar Pregunta</h3>
     <form action="/web/updatetriviaquestion" method="POST" class="border border-light p-4">

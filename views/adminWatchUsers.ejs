@@ -1,0 +1,51 @@
+<%- include('templates/header', {tittle: "Gestionar usuarios", userName: userName, userType: userType}) %>
+<h5 style="display: none;"> <%= userName %></h5>
+<div class="col-md-12 mt-3 p-5">
+    <h3>Usuarios: </h3>
+    <table class="table table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <!--th oculto con id-->
+                <th scope="col">Nombre</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Tipo de Usuario</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let i = 1; %>
+            <% if (usersDataArray.length > 0) { %>            
+                <% usersDataArray.forEach(users => { %>
+                    <tr>
+                        <td class="text-center"><%= i++; %>
+                            <% if (users.userType ==="admin") { %>
+                                <img src="/../public/images/trophy.png" alt="Trophy" class="img-fluid imgIcon" />
+                            <% } else { %>
+                                <img src="/../public/images/medal.png" alt="Medal" class="img-fluid imgIcon" />
+                            <% } %> 
+                            </td>
+                        <td><%= users.id %></td>
+                        <td><%= users.userName %></td>
+                        <td><%= users.userType %></td>
+                        <td><%= users.userStatus %></td>
+                        <td>
+                            <% if (users.userStatus ==="activo") { %>
+                                <button type="button" onclick="window.location='/web/disableUser/<%= users.userName %>'" class="btn btn-danger">
+                                    Desactivar
+                                </button>
+                            <% } else { %>
+                                <button type="button" onclick="window.location='/web/enableUser/<%= users.userName %>'" class="btn btn-success">
+                                    Activar
+                                </button>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% }) %>
+                <% } %>
+        </tbody>
+    </table>
+</div>
+
+<%- include('templates/footer') %>
