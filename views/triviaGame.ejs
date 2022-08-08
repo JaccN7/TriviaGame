@@ -7,12 +7,11 @@
             <div class="card-deck">
                 <div class="card p-5">
 
-                    <form action="finishedtrivia" method="POST">
-                    
+                    <form action="/finishedtrivia" method="POST">         
                     <% for (var i = 0; i < randomTriviaQuestion.length; i++) { %>
-                        <input type="hidden" name="id" value="<%= randomTriviaQuestion[i].id %>" required>
+                        
                         <% let arrayAnswers = [randomTriviaQuestion[i].answer1, randomTriviaQuestion[i].answer2, randomTriviaQuestion[i].answer3, randomTriviaQuestion[i].answer4, randomTriviaQuestion[i].answer5 ] %>
-                        <% console.log("arrayAnswers: " + arrayAnswers) %>
+
                         <% let randomArray = [] %>
                         <% for (var j = 0; j < 5; j++) { %>
                             <% let randomNumber = Math.floor(Math.random() * 5) %>
@@ -22,9 +21,10 @@
                                 <% randomArray.push(randomNumber) %>
                             <% } %>
                         <% } %>
-                        <% console.log(randomArray) %>
+                        
                         <fieldset class="mb-3">
                         <legend>* <%=randomTriviaQuestion[i].question %></legend>
+                        
                         <% for (var j = 0; j < arrayAnswers.length; j++) { %>
                             <% let name = "question" + (i + 1) +"answers" %>
                             <% if (arrayAnswers[randomArray[j]] != "") { %>
