@@ -28,14 +28,14 @@ app.set('view engine', 'ejs');
 app.set('views', __dirname + '/views');
 
 //Rutas API
-app.use('/', playerScoreRoutes.routes);
-app.use('/api/game', triviaQuestionRoutes.routes);
-app.use('/api/userprofile', userRoutes.routes);
+app.use('/api', playerScoreRoutes.routes); //corregirr: la vista principal se renderiza desde aqui
+app.use('/api', triviaQuestionRoutes.routes);
+app.use('/api', userRoutes.routes);
 
 //Rutas Web
-app.use('/web/game', playerScoreWebRoutes.routes);
-app.use('/web/game', triviaQuestionWebRoutes.routes);
-app.use('/web/userprofile', userWebRoutes.routes);
+app.use('/', playerScoreWebRoutes.routes);
+app.use('/web', triviaQuestionWebRoutes.routes);
+app.use('/web', userWebRoutes.routes);
 app.use('/', errorRoutes.routes);
 
 app.listen(PORT, () => {
