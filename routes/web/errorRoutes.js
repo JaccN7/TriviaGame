@@ -8,7 +8,10 @@ router.use((req, res, next) => {
 });
 
 router.use((error, req, res, next) => {
-    res.status(error.status || 500).render("error", { message: error.message, error: error.message });
+    let userName, userType;
+    req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
+    req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
+    res.status(error.status || 500).render("error", { message: error.message, error: error.message, userName: userName, userType: userType });
 });
 
 module.exports = {
