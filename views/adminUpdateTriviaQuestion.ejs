@@ -2,8 +2,8 @@
 
 <div class="container-fluid px-5 my-5">
     <h3 class="text-center">Modificar Pregunta</h3>
-    <form action="/web/game/updatetriviaquestion" method="POST" class="border border-light p-4">
-        <input type="hidden" id="question" name="question" value="<%= objModifiedQuestion.id %>" required>      
+    <form action="/web/updatetriviaquestion" method="POST" class="border border-light p-4">
+        <input type="hidden" id="id" name="id" value="<%= objModifiedQuestion.id %>" required>      
         <div class="form-group">
             <label for="question">Pregunta:</label>
             <input type="text" class="form-control" id="question" name="question" value="<%= objModifiedQuestion.question %>" required>
