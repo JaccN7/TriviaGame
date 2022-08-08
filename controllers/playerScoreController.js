@@ -5,6 +5,9 @@ const fireStore = firebase.firestore();
 
 //Cargar todos los puntajes
 const getPlayerScore = async (req, res, next) => {
+    let userName, userType;
+    req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
+    req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
     try {
         const playerScore = await fireStore.collection('playerScore');
         const playerScoreData = await playerScore.get();
@@ -31,34 +34,24 @@ const getPlayerScore = async (req, res, next) => {
             });
             //Comprobar el origen de la petición operador ternario solo if sin else
             if(req.originalUrl.includes("api")) return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
-            res.render('index', { message: "Puntajes registrados", playerScoreArray });
+            res.render('index', { message: "Puntajes registrados", playerScoreArray: playerScoreArray, userName: userName, userType: userType });
         }
     } catch (error) {
-        res.render('error', { message: "Error al obtener los puntajes", error: error.message });
+        res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType });
     }
 }
 
 //Crear un nuevo puntaje (Cuando se termina un juego)
 const addPlayerScore = async (req, res, next) => {
     console.log("### Método addPlayerScore ###");
+    let userName, userType;
+    req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
+    req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
     try {
-        console.log("entre al try");
         const playerScore = req.body;
 
-        
-        let userName = '';
-        //comprobar si existe el req.session.userIdentification.token para extraer el nombre del usuario si no existe asignarle un valor por defecto 
-        if(req.session.userIdentification){
-            userName = req.session.userIdentification.userName;
-        }else{
-            userName = "Anónimo";
-        }
-        console.log("userName: " + userName);
-
         const idQuestions = playerScore.id; //ID de las preguntas aleatorias
-        console.log(idQuestions);
         const answerObtained = [playerScore.question1answers, playerScore.question2answers, playerScore.question3answers]; //Respuestas ingresadas por el jugador
-        console.log(answerObtained);
         let score = 0;
         let porcentage = 0;
         let date = new Date();
@@ -66,7 +59,6 @@ const addPlayerScore = async (req, res, next) => {
         //Comparar la respuesta correcta (answer5) con las respuesta ingresadas por el jugador
         for (let i = 0; i < idQuestions.length; i++) {
             const triviaQuestion = await fireStore.collection('triviaQuestion').doc(idQuestions[i]).get();
-            console.log(triviaQuestion.data().answer5);
             if (triviaQuestion.data().answer5 === answerObtained[i]) {
                 score++;
             }
@@ -93,7 +85,7 @@ const addPlayerScore = async (req, res, next) => {
     } catch (error) {
         //Comprobar el origen de la petición
         req.originalUrl.includes("web") ?
-            res.render('error', { message: "Error al obtener los puntajes", error: error.message }) :
+            res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType }) :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
     }
 }
