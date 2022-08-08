@@ -30,9 +30,7 @@ const getPlayerScore = async (req, res, next) => {
                 return b.score - a.score;
             });
             //Comprobar el origen de la petición operador ternario solo if sin else
-            if(req.originalUrl.includes("api")) {
-                return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
-            }
+            if(req.originalUrl.includes("api")) return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
             res.render('index', { message: "Puntajes registrados", playerScoreArray });
         }
     } catch (error) {
@@ -42,11 +40,25 @@ const getPlayerScore = async (req, res, next) => {
 
 //Crear un nuevo puntaje (Cuando se termina un juego)
 const addPlayerScore = async (req, res, next) => {
-    console.log("### Método getPlayerScore ###");
+    console.log("### Método addPlayerScore ###");
     try {
+        console.log("entre al try");
         const playerScore = req.body;
+
+        
+        let userName = '';
+        //comprobar si existe el req.session.userIdentification.token para extraer el nombre del usuario si no existe asignarle un valor por defecto 
+        if(req.session.userIdentification){
+            userName = req.session.userIdentification.userName;
+        }else{
+            userName = "Anónimo";
+        }
+        console.log("userName: " + userName);
+
         const idQuestions = playerScore.id; //ID de las preguntas aleatorias
+        console.log(idQuestions);
         const answerObtained = [playerScore.question1answers, playerScore.question2answers, playerScore.question3answers]; //Respuestas ingresadas por el jugador
+        console.log(answerObtained);
         let score = 0;
         let porcentage = 0;
         let date = new Date();
@@ -54,6 +66,7 @@ const addPlayerScore = async (req, res, next) => {
         //Comparar la respuesta correcta (answer5) con las respuesta ingresadas por el jugador
         for (let i = 0; i < idQuestions.length; i++) {
             const triviaQuestion = await fireStore.collection('triviaQuestion').doc(idQuestions[i]).get();
+            console.log(triviaQuestion.data().answer5);
             if (triviaQuestion.data().answer5 === answerObtained[i]) {
                 score++;
             }
@@ -63,7 +76,7 @@ const addPlayerScore = async (req, res, next) => {
 
         //Objeto con los datos del nuevo puntaje
         const newPlayerScore = ({
-            name: 'playerScore.name',
+            name: userName,
             score: score,
             porcentage: porcentage,
             date: date
@@ -73,10 +86,9 @@ const addPlayerScore = async (req, res, next) => {
         const playerScoreData = await fireStore.collection('playerScore').add(newPlayerScore);
 
         //Comprobar el origen de la petición
-        if(req.originalUrl.includes("api")) {
-            return res.status(201).json({ message: "Puntaje registrado", playerScoreData });
-        }
-            res.redirect('/');
+        req.originalUrl.includes("web") ?
+            res.redirect('/') :
+            res.status(201).json({ message: "Puntaje registrado", playerScoreData });
 
     } catch (error) {
         //Comprobar el origen de la petición
