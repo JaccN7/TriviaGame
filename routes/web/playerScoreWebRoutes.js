@@ -7,7 +7,7 @@ const { getPlayerScore, addPlayerScore } = require("../../controllers/playerScor
 router.get('/', getPlayerScore);
 
 //Ruta para ingresar nuevos puntajes
-router.post('/finishedtrivia', addPlayerScore);
+router.post('/web/finishedtrivia', addPlayerScore);
 
 module.exports = {
     routes: router

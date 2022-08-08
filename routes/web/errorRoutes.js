@@ -8,7 +8,7 @@ router.use((req, res, next) => {
 });
 
 router.use((error, req, res, next) => {
-    res.status(error.status || 500).render("error");
+    res.status(error.status || 500).render("error", { message: error.message, error: error.message });
 });
 
 module.exports = {
