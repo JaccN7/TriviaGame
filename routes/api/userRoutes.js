@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {pageSignUp, pageLogin, signUp, login, deleteUsers, registeredUsers} = require('../../controllers/userController');
+const {pageSignUp, pageLogin, signUp, login, changeUserStatus, registeredUsers} = require('../../controllers/userController');
 
 //Crear usuario
 router.post('/signup', signUp);
@@ -13,7 +13,7 @@ router.post('/login', login);
 router.get('/', registeredUsers);
 
 //Borrar usuario
-router.delete('/', deleteUsers);
+//router.delete('/', deleteUsers);
 
 module.exports = {
     routes: router
