@@ -1,23 +1,22 @@
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+<nav class="navbar navbar-fixed-top navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
             <a class="navbar-brand" href="/../">
                 <img src="/../public/images/trivia.png" class="img-fluid imgIcon" alt="Trivia" />
                 Trivia Game -
-                <% if (userName!="Anónimo") { %>
+                <% if (userName!="Anónimo" ) { %>
                     <span class="text-light">
-                    <%= userName %>
+                        <%= userName %>
                     </span>
-                <% } %>
+                    <% } %>
             </a>
             <ul class="nav justify-content-end">
-                
-                <% if (userName!="Anónimo") { %>
-                    <% if (userType==="admin") { %>
+
+                <% if (userName!="Anónimo" ) { %>
+                    <% if (userType==="admin" ) { %>
                         <li class="nav-item">
                             <a class="nav-link text-light" href="/web/triviaquestions">Ver Preguntas</a>
                         </li>
@@ -30,19 +29,19 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" href="/web/logout">Cerrar Sesión</a>
                         </li>
-                    <% } else {%>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" href="/web/logout">Cerrar Sesión</a>
-                        </li>
-                    <% } %>
-                <% } else {%>
-                    <li class="nav-item">
-                        <a class=" nav-link text-light" href="/web/signup"> Registrar Usuario</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class=" nav-link text-light" href="/web/login"> Iniciar Sesión</a>
-                    </li>
-                <% } %>
+                        <% } else {%>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" href="/web/logout">Cerrar Sesión</a>
+                            </li>
+                            <% } %>
+                                <% } else {%>
+                                    <li class="nav-item">
+                                        <a class=" nav-link text-light" href="/web/signup"> Registrar Usuario</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class=" nav-link text-light" href="/web/login"> Iniciar Sesión</a>
+                                    </li>
+                                    <% } %>
             </ul>
         </div>
     </div>
