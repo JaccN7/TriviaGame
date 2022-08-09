@@ -39,5 +39,5 @@ app.use('/web', userWebRoutes.routes);
 app.use('/', errorRoutes.routes);
 
 app.listen(PORT, () => {
-    console.log(`Server is listening on port ${PORT}\nVisita: http://localhost:${PORT}\n______________________________________________\n\n`);
+    console.log(`Visita: http://localhost:${PORT}\n______________________________________________\n\n`);
 });
