@@ -107,16 +107,13 @@
 /* Formulario Login - Fin*/
 
 /* Inputs radio de la Trivia - Inicio */
-input {
+input[type=radio] {
+    display: none;
     padding: 2rem;
     background: #fcfcfc;
 }
 
-input[type=radio] {
-    display: none;
-}
-
-label {
+.label {
     display: inline-block;
     margin: 0.2rem;
     padding: 0.5rem;
@@ -126,7 +123,7 @@ label {
     cursor: pointer;
 }
 
-label:hover {
+.label:hover {
     background: #5b43e6;
     color: #fff;
     font-weight: bold;
@@ -143,3 +140,13 @@ input[type=radio]:checked + label {
     color: #ffffff;
 }
 /* Formulario Login - Fin */
+
+.correctAnswer{
+    background: #95f1b49d !important;
+    font-weight: bold !important;
+}
+
+.question{
+    background: #557ae0a1 !important;
+    font-weight: bold !important;
+}
