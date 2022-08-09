@@ -18,16 +18,16 @@ router.get('/triviaquestions', checkAuthentication, checkAuthorization, getTrivi
 //Ruta para renderizar formulario para añadir una pregunta - Renderizado en la vista - Funcionando
 router.get('/formnewtriviaquestion', checkAuthentication, checkAuthorization, pageCreateTriviaQuestion);
 //Ruta para guardar la pregunta en la base de datos - Funcionando
-router.post('/newtriviaquestion', checkAuthentication, checkAuthorization,  createTriviaQuestion); 
+router.post('/newtriviaquestion', checkAuthentication, checkAuthorization, createTriviaQuestion); 
 
 //Rutas para modificar preguntas
 //Ruta para renderizar formulario para modificar una pregunta - Renderizado en la vista - Funcionando
-router.get('/formupdtriviaquestion/:id', pageUpdateTriviaQuestion);
+router.get('/formupdtriviaquestion/:id', checkAuthentication, checkAuthorization, pageUpdateTriviaQuestion);
 //Ruta para modificar la pregunta en la base de datos - Funcionando
-router.post('/updatetriviaquestion', updateTriviaQuestion);
+router.post('/updatetriviaquestion', checkAuthentication, checkAuthorization, updateTriviaQuestion);
 
 //Ruta para eliminar una pregunta - Funcionando
-router.get('/deletetriviaquestion/:id', deleteTriviaQuestion);
+router.get('/deletetriviaquestion/:id', checkAuthentication, checkAuthorization, deleteTriviaQuestion);
 
 module.exports = {
     routes: router

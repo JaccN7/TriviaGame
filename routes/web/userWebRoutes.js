@@ -3,7 +3,7 @@ const router = express.Router();
 const check_authentication = require('../../middleware/check_authentication');
 const check_authorization = require('../../middleware/check_authorization');
 
-const {pageSignUp, pageLogin, signUp, login, deleteUsers, registeredUsers, logout} = require('../../controllers/userController');
+const {pageSignUp, pageLogin, signUp, login, changeUserStatus, registeredUsers, logout} = require('../../controllers/userController');
 
 //Registrar usuario
 //Ruta para renderizar el formulario de registro de usuario
@@ -17,7 +17,8 @@ router.get('/login', pageLogin);
 //Ruta para iniciar sesión
 router.post('/authenticate', login);
 
-//Eliminar usuario - Solo para userTyper admin
+//Cambiar UserStatus - Solo para userTyper admin
+router.get('/changeUserStatus/:id', check_authentication, check_authorization, changeUserStatus);
 
 //Ver Usuarios Registrados - Solo para userTyper admin
 router.get('/registeredUsers', check_authentication, check_authorization, registeredUsers);
