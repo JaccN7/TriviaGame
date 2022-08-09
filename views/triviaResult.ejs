@@ -1,0 +1,45 @@
+<%- include('templates/header', {tittle: "Jugando" , userName: userName, userType: userType}) %>
+
+    <!-- card con las respuestas correctas-->
+    <div class="container-fluid mt-3">
+        <div class="row">
+            <div class="col-md-12 text-center mt-5">
+                <button type="button" onclick="window.location='/web/generategame'" class="btn btn-dark">
+                    Volver a Jugar <img src="../public/images/playGame.png" alt="Empezar Trivia"
+                        class="img-fluid imgIcon" />
+                </button>
+            </div>
+            <div class="container-fluid d-flex justify-content-center mt-5">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-4 d-flex justify-content-center">
+                            <img src="/../public/images/painting.jpg" class="img-fluid imgresult"
+                                alt="ResultTriviaImage">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body p-5 triviaresult">
+                                <h4 class="fw-bold text-center mt-4">Resultado de la Trivia</h4>
+                                <p class="card-title">Puntaje Obtenido: <%= newPlayerScore.score %> / 3</p>
+                                <p class="card-title">Porcentaje de aciertos: <%= newPlayerScore.porcentage %></p>
+                                <h5 class="mt-4">Preguntas y Respuestas</h5>
+                                <% for (var i=0; i < questionsTrivia.length; i++) { %>
+                                    <p class="fw-bold">
+                                        <%= (i+1) %>.- <%= questionsTrivia[i] %>
+                                    </p>
+                                    <p>
+                                        Tu Respuesta: <%= answerObtained[i] %>
+                                    </p>
+                                    <p class="text-success fw-bold">
+                                        Respuesta Correcta: <%= correctAnswers[i] %>
+                                    </p>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- recorrer el arreglo de preguntas y respuestas-->
+
+            </div>
+        </div>
+
+        <%- include('templates/footer') %>

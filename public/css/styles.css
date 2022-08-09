@@ -150,3 +150,15 @@ input[type=radio]:checked + label {
     background: #557ae0a1 !important;
     font-weight: bold !important;
 }
+
+.triviaresult{
+    background: #72737454 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.imgresult{
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
