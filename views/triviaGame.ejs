@@ -9,7 +9,7 @@
             <% } %>
             <div class="card-deck">
                 <div class="card p-4">
-                        <form action="/web/finishedtrivia" method="POST"> 
+                    <form action="/web/finishedtrivia" method="POST"> 
 
                     <% for (var i = 0; i < randomTriviaQuestion.length; i++) { %>
                         <input type="hidden" name="id" value="<%= randomTriviaQuestion[i].id %>" required> 
@@ -32,7 +32,7 @@
                             <% let identificador = "question" + (i+1) + "idInput"+j %>                          
                             <% if (arrayAnswers[randomArray[j]] != "") { %>
                                 <input type="radio" name="<%= name %>" value="<%= arrayAnswers[randomArray[j]] %>" id="<%= identificador %>">
-                                <label for="<%= identificador %>"><%= arrayAnswers[randomArray[j]] %></label>
+                                <label class="label" for="<%= identificador %>"><%= arrayAnswers[randomArray[j]] %></label>
                             <% } %>
                         <% } %>
                         </fieldset>  
