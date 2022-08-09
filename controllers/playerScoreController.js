@@ -5,10 +5,9 @@ const fireStore = firebase.firestore();
 
 //Cargar todos los puntajes
 const getPlayerScore = async (req, res, next) => {
-    let userName, userType, userStatus;
+    let userName, userType;
     req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
     req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
-    req.session.userIdentification ? userStatus = req.session.userIdentification.userStatus : userStatus = "";
     try {
         const playerScore = await fireStore.collection('playerScore');
         const playerScoreData = await playerScore.get();
@@ -17,7 +16,7 @@ const getPlayerScore = async (req, res, next) => {
 
         //Comprobar si hay puntajes registrados
         if (playerScoreData.empty) {
-            res.render('index', { message: "No hay puntajes registrados", playerScoreArray, userName, userType, userStatus });
+            res.render('index', { message: "No hay puntajes registrados", playerScoreArray, userName, userType });
         } else {
             playerScoreData.forEach(doc => {
                 const playerScore = new PlayerScore(
@@ -35,20 +34,18 @@ const getPlayerScore = async (req, res, next) => {
             });
             //Comprobar el origen de la petición operador ternario solo if sin else
             if(req.originalUrl.includes("api")) return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
-            res.render('index', { message: "Puntajes registrados", playerScoreArray: playerScoreArray, userName: userName, userType: userType, userStatus: userStatus });
+            res.render('index', { message: "Puntajes registrados", playerScoreArray: playerScoreArray, userName: userName, userType: userType});
         }
     } catch (error) {
-        res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType, userStatus });
+        res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType});
     }
 }
 
 //Crear un nuevo puntaje (Cuando se termina un juego)
 const addPlayerScore = async (req, res, next) => {
-    console.log("### Método addPlayerScore ###");
-    let userName, userType, userStatus;
+    let userName, userType;
     req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
     req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
-    req.session.userIdentification ? userStatus = req.session.userIdentification.userStatus : userStatus = "";
     try {
         const playerScore = req.body;
 
@@ -56,6 +53,8 @@ const addPlayerScore = async (req, res, next) => {
         const answerObtained = [playerScore.question1answers, playerScore.question2answers, playerScore.question3answers]; //Respuestas ingresadas por el jugador
         let score = 0;
         let porcentage = 0;
+        let correctAnswers=[]; //Arreglo con las respuestas correctas para visualizarlas en el resultado del juego
+        let questionsTrivia=[]; //Arreglo con las preguntas para visualizarlas en el resultado del juego
         let date = new Date();
         date = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); //Fecha actual (dd/mm/yyyy)
         //Comparar la respuesta correcta (answer5) con las respuesta ingresadas por el jugador
@@ -63,6 +62,8 @@ const addPlayerScore = async (req, res, next) => {
             const triviaQuestion = await fireStore.collection('triviaQuestion').doc(idQuestions[i]).get();
             if (triviaQuestion.data().answer5 === answerObtained[i]) {
                 score++;
+                correctAnswers.push(triviaQuestion.data().answer5);
+                questionsTrivia.push(triviaQuestion.data().question);
             }
         }
         porcentage = (score * 100) / idQuestions.length;
@@ -81,13 +82,13 @@ const addPlayerScore = async (req, res, next) => {
 
         //Comprobar el origen de la petición
         req.originalUrl.includes("web") ?
-            res.redirect('/') :
+            res.render('triviaResult', { message: "Puntaje registrado", userName: userName, userType: userType, newPlayerScore: newPlayerScore, questionsTrivia: questionsTrivia, correctAnswers: correctAnswers, answerObtained: answerObtained }) :
             res.status(201).json({ message: "Puntaje registrado", playerScoreData });
 
     } catch (error) {
         //Comprobar el origen de la petición
         req.originalUrl.includes("web") ?
-            res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType, userStatus }) :
+            res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType }) :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
     }
 }
