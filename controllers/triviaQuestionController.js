@@ -35,15 +35,14 @@ const getGenerateGame = async (req, res, next) => {
                 randomTriviaQuestion.push(randomTriviaQuestionObject);
             }
         }
-
         //Comprobar el origen de la petición
         req.originalUrl.includes("web") ?
-            res.render('triviaGame', { randomTriviaQuestion: randomTriviaQuestion, userName: userName, userType: userType }) :
+            res.render('triviaGame', { randomTriviaQuestion: randomTriviaQuestion, userName: userName, userType: userType}) :
             res.status(200).json({ message: "Juego generado", randomTriviaQuestion: randomTriviaQuestion });
     } catch (error) {
         //Comprobar el orgigen de la petición
         req.originalUrl.includes("web") ?
-            res.render('error', { message: "Error al generar juego", error: error.message, userName: userName, userType: userType }) :
+            res.render('error', { message: "Error al generar juego", error: error.message, userName: userName, userType: userType}) :
             res.status(500).json({ message: "Error al generar juego", error: error.message });
     }
 }
@@ -190,7 +189,7 @@ const pageUpdateTriviaQuestion = async (req, res, next) => {
             res.render('error', { message: "Pregunta no encontrada", userName: userName, userType: userType });
     } catch (error) {
         req.originalUrl.includes("web") ?
-            res.render('error', { message: "Error al actualizar pregunta", error: error.message, userName: userName }) :
+            res.render('error', { message: "Error al actualizar pregunta", error: error.message, userName: userName, userType: userType }) :
             res.status(500).json({ message: "Se ha presentado un error", error: error.message });
     }
 }

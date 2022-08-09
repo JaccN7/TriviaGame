@@ -61,6 +61,9 @@ const login = async (req, res, next) => {
         const checkPassword = await bcrypt.compare(req.body.userPassword, user.data().userPassword);
         if (!checkPassword) return res.render('error', { message: "Contraseña incorrecta", userName: username, userType: userType });
             
+        //Comprobar si el usuario está activo
+        if (user.data().userStatus !== 'active') return res.render('error', { message: "El usuario no está activo", userName: username, userType: userType}); 
+
         //UserName y contraseña correctos
         //crear token
         const token = jwt.sign({ userName: user.data().userName }, process.env.JWT_KEY, { expiresIn: '6h' });
@@ -94,30 +97,13 @@ const logout = async (req, res, next) => {
     }
 }
 
-//Eliminar usuario - Solo para userTyper admin
-const deleteUsers = async (req, res, next) => {
-    try {
-        const users = await fireStore.collection('user').get();
-        users.docs.forEach(async (doc) => {
-            await fireStore.collection('user').doc(doc.id).delete();
-        }
-        );
-        res.status(200).json({ message: "Usuarios eliminados" });
-    } catch (error) {
-        if (req.originalUrl.includes('web'))
-            res.render('error', { message: "Error al eliminar usuarios", error: error.message });
-        else
-            res.status(500).json({ message: "Error al eliminar usuarios", error: error.message });
-    }
-}
-
-//Ver Usuario Registrados - Solo para userTyper admin
+//Ver Usuario Registrados del tipo userType: userPlayer - Solo para userTyper admin
 const registeredUsers = async (req, res, next) => {
     let userName, userType;
     req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
     req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
     try {
-        const usersData = await fireStore.collection('user').get();
+        const usersData = await fireStore.collection('user').where('userType', '==', 'userPlayer').get();
         const usersDataArray = [];
         usersData.docs.forEach(doc => {
             const users = ({
@@ -140,17 +126,29 @@ const registeredUsers = async (req, res, next) => {
     }
 }
 
-//Ver información Usuario (Mi perfil) - 
-//UserType: userPlayer puede ver su propio perfil con los datos de sus puntajes registrados
-//UserType: admin puede ver el perfil de cualquier usuario
-const userProfile = async (req, res, next) => {
+//Cambiar userstatus - Solo para userTyper admin
+const changeUserStatus = async (req, res, next) => {
+    let userName, userType;
+    req.session.userIdentification ? userName = req.session.userIdentification.userName : userName = "Anónimo";
+    req.session.userIdentification ? userType = req.session.userIdentification.userType : userType = "Invitado";
     try {
-
+        //recibir el id del usuario a cambiar el status
+        const idUser = req.params.id;
+        //obtener el usuario a cambiar el status
+        const user = await fireStore.collection('user').doc(idUser).get();
+        if (user.empty) return res.render('error', { message: "El usuario no existe", userName: userName, userType: userType });
+        //si es active cambiar a inactive y viceversa
+        if (user.data().userStatus === 'active') {
+            await fireStore.collection('user').doc(idUser).update({ userStatus: 'inactive' });
+            req.originalUrl.includes('web') ? res.redirect('/web/registeredUsers') : res.status(200).json({ message: "Usuario cambiado de status" });
+        } else {
+            await fireStore.collection('user').doc(idUser).update({ userStatus: 'active' });
+            req.originalUrl.includes('web') ? res.redirect('/web/registeredUsers') : res.status(200).json({ message: "Usuario cambiado de status" });
+        }
     } catch (error) {
-        if (req.originalUrl.includes('web'))
-            res.render('error', { message: "Error al obtener perfil de usuario", error: error.message });
-        else
-            res.status(500).json({ message: "Error al obtener perfil de usuario", error: error.message });
+        req.originalUrl.includes('web') ?
+            res.render('error', { message: "Error al eliminar usuario", error: error.message, userName: userName, userType: userType}) :
+            res.status(500).json({ message: "Error al eliminar usuario", error: error.message });
     }
 }
 
@@ -159,8 +157,7 @@ module.exports = {
     pageLogin,
     signUp,
     login,
-    deleteUsers,
+    changeUserStatus,
     registeredUsers,
-    userProfile,
     logout
 }
