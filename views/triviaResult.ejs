@@ -16,7 +16,7 @@
                             <img src="/../public/images/painting.jpg" class="img-fluid imgresult"
                                 alt="ResultTriviaImage">
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-8 fw-bold">
                             <div class="card-body p-5 triviaresult">
                                 <h4 class="fw-bold text-center mt-4">Resultado de la Trivia</h4>
                                 <p class="card-title">Puntaje Obtenido: <%= newPlayerScore.score %> / 3</p>
@@ -26,19 +26,24 @@
                                     <p class="fw-bold">
                                         <%= (i+1) %>.- <%= questionsTrivia[i] %>
                                     </p>
-                                    <p>
+                                    <% if (answerObtained[i] !== correctAnswers[i]) {%>
+                                    <p class="text-danger fw-bold">
                                         Tu Respuesta: <%= answerObtained[i] %>
                                     </p>
+                                    <% } %>
                                     <p class="text-success fw-bold">
                                         Respuesta Correcta: <%= correctAnswers[i] %>
                                     </p>
                                 <% } %>
-                            </div>
+                                <div class="container-fluid d-flex">
+                                    <button type="button" onclick="window.location='/../'" class="btn btn-dark ms-auto">
+                                        Volver a Inicio <i class="fa-solid fa-house"></i>
+                                    </button>
+                                </div>
+                            </div>  
                         </div>
                     </div>
                 </div>
-                <!-- recorrer el arreglo de preguntas y respuestas-->
-
             </div>
         </div>
 

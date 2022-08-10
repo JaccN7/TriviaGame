@@ -33,11 +33,11 @@ const getPlayerScore = async (req, res, next) => {
                 return b.score - a.score;
             });
             //Comprobar el origen de la petición operador ternario solo if sin else
-            if(req.originalUrl.includes("api")) return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
-            res.render('index', { message: "Puntajes registrados", playerScoreArray: playerScoreArray, userName: userName, userType: userType});
+            if (req.originalUrl.includes("api")) return res.status(200).json({ message: "Puntajes obtenidos", playerScoreArray });
+            res.render('index', { message: "Puntajes registrados", playerScoreArray: playerScoreArray, userName: userName, userType: userType });
         }
     } catch (error) {
-        res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType});
+        res.render('error', { message: "Error al obtener los puntajes", error: error.message, userName, userType });
     }
 }
 
@@ -53,17 +53,17 @@ const addPlayerScore = async (req, res, next) => {
         const answerObtained = [playerScore.question1answers, playerScore.question2answers, playerScore.question3answers]; //Respuestas ingresadas por el jugador
         let score = 0;
         let porcentage = 0;
-        let correctAnswers=[]; //Arreglo con las respuestas correctas para visualizarlas en el resultado del juego
-        let questionsTrivia=[]; //Arreglo con las preguntas para visualizarlas en el resultado del juego
+        let correctAnswers = []; //Arreglo con las respuestas correctas para visualizarlas en el resultado del juego
+        let questionsTrivia = []; //Arreglo con las preguntas para visualizarlas en el resultado del juego
         let date = new Date();
         date = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(); //Fecha actual (dd/mm/yyyy)
         //Comparar la respuesta correcta (answer5) con las respuesta ingresadas por el jugador
         for (let i = 0; i < idQuestions.length; i++) {
             const triviaQuestion = await fireStore.collection('triviaQuestion').doc(idQuestions[i]).get();
+            correctAnswers.push(triviaQuestion.data().answer5);
+            questionsTrivia.push(triviaQuestion.data().question);
             if (triviaQuestion.data().answer5 === answerObtained[i]) {
                 score++;
-                correctAnswers.push(triviaQuestion.data().answer5);
-                questionsTrivia.push(triviaQuestion.data().question);
             }
         }
         porcentage = (score * 100) / idQuestions.length;
